@@ -1,0 +1,8 @@
+fastapi
+razorpay
+python-dotenv
+uvicorn
+aiohttp
+beautifulsoup4
+requests
+concurrent.futures
