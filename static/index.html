@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deal Aggregator - Best Deals from Top Platforms</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <div class="logo">
+                    <h1><i class="fas fa-fire text-danger"></i> DealAggregator</h1>
+                </div>
+                <div class="stats">
+                    <span class="badge bg-success" id="dealCount">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero bg-gradient-primary text-white py-5">
+        <div class="container text-center">
+            <h2 class="display-6 mb-3">Discover Amazing Deals Across India's Top Platforms</h2>
+            <p class="lead mb-4">Real-time deals from Flipkart, Amazon, JioMart, Myntra, Swiggy & BigBasket</p>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="platform-badges">
+                        <span class="badge bg-light text-dark me-2 mb-2"><i class="fas fa-shopping-cart"></i> Flipkart</span>
+                        <span class="badge bg-light text-dark me-2 mb-2"><i class="fab fa-amazon"></i> Amazon</span>
+                        <span class="badge bg-light text-dark me-2 mb-2"><i class="fas fa-store"></i> JioMart</span>
+                        <span class="badge bg-light text-dark me-2 mb-2"><i class="fas fa-tshirt"></i> Myntra</span>
+                        <span class="badge bg-light text-dark me-2 mb-2"><i class="fas fa-utensils"></i> Swiggy</span>
+                        <span class="badge bg-light text-dark me-2 mb-2"><i class="fas fa-shopping-basket"></i> BigBasket</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters bg-light py-3">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button class="btn btn-outline-primary btn-sm platform-filter active" data-platform="all">
+                            <i class="fas fa-globe"></i> All Platforms
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm platform-filter" data-platform="flipkart">
+                            Flipkart
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm platform-filter" data-platform="amazon">
+                            Amazon
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm platform-filter" data-platform="jiomart">
+                            JioMart
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm platform-filter" data-platform="myntra">
+                            Myntra
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm platform-filter" data-platform="swiggy">
+                            Swiggy
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm platform-filter" data-platform="bigbasket">
+                            BigBasket
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="btn btn-success btn-sm" id="refreshDeals">
+                        <i class="fas fa-sync-alt"></i> Refresh Deals
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Spinner -->
+    <div class="loading-container" id="loadingContainer">
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-muted">Fetching latest deals...</p>
+        </div>
+    </div>
+
+    <!-- Deals Section -->
+    <main class="deals-section py-5">
+        <div class="container">
+            <div class="row" id="dealsContainer">
+                <!-- Deals will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Error Message -->
+    <div class="alert alert-danger text-center d-none" id="errorMessage">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span id="errorText">Failed to load deals. Please try again.</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-2">&copy; 2025 DealAggregator. All rights reserved.</p>
+            <p class="small text-muted">Real-time deals aggregated from India's top e-commerce platforms</p>
+        </div>
+    </footer>
+
+    <!-- Razorpay Checkout Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+</html>

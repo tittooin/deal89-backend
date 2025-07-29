@@ -1,0 +1,333 @@
+/* Custom CSS for Deal Aggregator */
+
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+/* Header Styles */
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.header h1 {
+    color: white;
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.header .stats {
+    color: white;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.platform-badges .badge {
+    font-size: 0.85rem;
+    padding: 8px 12px;
+}
+
+/* Deal Card Styles */
+.deal-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: none;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.deal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.deal-card .card-header {
+    background: none;
+    border-bottom: 1px solid #e9ecef;
+    padding: 1rem;
+}
+
+.deal-card .card-body {
+    padding: 1.25rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.deal-card .card-footer {
+    background: none;
+    border-top: 1px solid #e9ecef;
+    padding: 1rem;
+    margin-top: auto;
+}
+
+/* Platform Badge */
+.platform-badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.platform-flipkart { background-color: #047bd0; color: white; }
+.platform-amazon { background-color: #ff9900; color: white; }
+.platform-jiomart { background-color: #0066cc; color: white; }
+.platform-myntra { background-color: #ff3f6c; color: white; }
+.platform-swiggy { background-color: #fc8019; color: white; }
+.platform-bigbasket { background-color: #84c225; color: white; }
+
+/* Deal Title */
+.deal-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Price Section */
+.price-section {
+    margin-bottom: 1rem;
+}
+
+.current-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--success-color);
+}
+
+.original-price {
+    font-size: 1rem;
+    color: var(--secondary-color);
+    text-decoration: line-through;
+    margin-left: 0.5rem;
+}
+
+.discount-badge {
+    background-color: var(--danger-color);
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+}
+
+/* Unlock Button */
+.unlock-btn {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    border: none;
+    border-radius: 25px;
+    padding: 12px 24px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.unlock-btn:hover {
+    background: linear-gradient(45deg, #218838, #1ba085);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.unlock-btn:active {
+    transform: translateY(0);
+}
+
+.unlock-btn .btn-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Loading States */
+.loading-container {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.btn-loading .spinner-border {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Filter Buttons */
+.platform-filter {
+    transition: all 0.3s ease;
+}
+
+.platform-filter.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.platform-filter:hover {
+    transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 1.4rem;
+    }
+    
+    .hero h2 {
+        font-size: 1.5rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    .deal-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .platform-badges .badge {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+    }
+    
+    .filters .d-flex {
+        justify-content: center;
+    }
+    
+    .filters .text-end {
+        text-align: center !important;
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .current-price {
+        font-size: 1.3rem;
+    }
+    
+    .unlock-btn {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+    }
+    
+    .deal-title {
+        font-size: 0.9rem;
+    }
+}
+
+/* Animation for new deals */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.deal-card.new-deal {
+    animation: fadeInUp 0.6s ease;
+}
+
+/* Success States */
+.success-message {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--secondary-color);
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: #dee2e6;
+}
+
+.empty-state h3 {
+    margin-bottom: 0.5rem;
+    color: var(--dark-color);
+}
+
+/* Scroll animations */
+.deal-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+}
+
+.deal-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
