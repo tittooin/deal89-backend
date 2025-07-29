@@ -1,0 +1,75 @@
+Build a real-time deal aggregator website using Python + FastAPI with frontend and backend structured as follows:
+
+✅ Scrape real-time shopping deals (not mock data) from these platforms:
+- Flipkart
+- Amazon
+- JioMart
+- Myntra
+- Swiggy Instamart
+- BigBasket
+
+⚠️ Do not use any official APIs. Scraping must be done using:
+- `requests` and `BeautifulSoup` for static HTML
+- `Selenium` or `Playwright` (optional) for JS-heavy pages
+
+✅ Each deal should contain:
+- Product title
+- Discounted price
+- Product URL
+- Affiliate link (generated automatically per platform)
+- Unlock button for ₹0.89
+
+✅ Auto Affiliate Link Generator Rules:
+- Flipkart → `https://dl.flipkart.com/dl<product-path>?affid=AFFILIATE_FLIPKART`
+- Amazon → `https://www.amazon.in/dp/<ASIN>?tag=AFFILIATE_AMAZON`
+- JioMart → `https://www.jiomart.com<path>?affid=AFFILIATE_JIOMART`
+- Myntra → `https://myntra.go2cloud.org/aff_c?offer_id=6&aff_id=AFFILIATE_MYNTRA&url=<URL>`
+- BigBasket → `https://www.bigbasket.com<path>?affiliate=AFFILIATE_BIGBASKET`
+- Swiggy → `https://cuelinks.com/redirect?url=<ORIGINAL_URL>&aff_id=AFFILIATE_SWIGGY` or similar redirect
+
+✅ Razorpay Integration:
+- Backend endpoint `/create_order` returns order_id
+- Use Razorpay Checkout.js on frontend
+- Razorpay keys are securely loaded from `.env` via `python-dotenv`
+- After successful payment, affiliate link opens in a new tab
+- Add optional `/razorpay-webhook` endpoint for real payment verification
+
+✅ Files:
+- `main.py` → FastAPI backend with endpoints:
+  - `/create_order`
+  - `/flipkart-deals`
+  - `/amazon-deals`
+  - `/jiomart-deals`
+  - etc.
+- `flipkart.py`, `amazon.py`, etc. → scraper modules
+- `index.html` → frontend showing deals with unlock button
+- `.env` → contains:
+  - RAZORPAY_KEY_ID
+  - RAZORPAY_KEY_SECRET
+  - AFFILIATE_FLIPKART
+  - AFFILIATE_AMAZON
+  - AFFILIATE_JIOMART
+  - AFFILIATE_MYNTRA
+  - AFFILIATE_BIGBASKET
+  - AFFILIATE_SWIGGY
+- `requirements.txt` → includes:
+  - fastapi
+  - uvicorn
+  - requests
+  - beautifulsoup4
+  - python-dotenv
+  - razorpay
+  - selenium (optional)
+- `.replit` → contains: `run = "uvicorn main:app --host=0.0.0.0 --port=8000 --reload"`
+
+✅ Frontend Deployment:
+- `index.html` must be ready to deploy to GitHub Pages + Cloudflare
+- Backend can be hosted on Replit or Render with FastAPI and public URL
+
+✅ UX Flow:
+1. User lands on page and sees latest scraped deals
+2. Each deal has title, price, unlock button
+3. On click, a Razorpay ₹0.89 payment is triggered
+4. After success, affiliate link opens
+
+This should be a complete, working, minimal MVP-level deal aggregator platform — optimized for real-time scraping, monetized via micro-payment and affiliate marketing — suitable for GitHub Pages + Cloudflare frontend deployment.
