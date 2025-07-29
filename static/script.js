@@ -6,7 +6,7 @@ class DealAggregator {
         this.filteredDeals = [];
         this.currentFilter = 'all';
         this.isLoading = false;
-        this.backendUrl = window.location.origin.replace(':5000', ':8000'); // Adjust for backend port
+        this.backendUrl = window.location.origin; // Use same origin since we're serving from FastAPI
         
         this.init();
     }
