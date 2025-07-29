@@ -9,6 +9,7 @@ import asyncio
 import concurrent.futures
 from typing import List, Dict, Any
 import logging
+import time
 from datetime import datetime
 
 # Import scraper modules
@@ -62,6 +63,60 @@ scrapers = {
 deals_cache = {}
 cache_timestamp = {}
 
+# Sample deals for immediate display
+sample_deals = {
+    "flipkart": [
+        {
+            "id": "flipkart_sample1",
+            "title": "Samsung Galaxy M14 5G (Smoky Teal, 128 GB)",
+            "current_price": "₹14,990",
+            "original_price": "₹17,990",
+            "discount_percentage": 16.7,
+            "url": "https://www.flipkart.com/samsung-galaxy-m14-5g-smoky-teal-128-gb/p/sample",
+            "platform": "flipkart",
+            "image_url": "",
+            "scraped_at": int(time.time())
+        },
+        {
+            "id": "flipkart_sample2", 
+            "title": "Apple iPhone 13 (Blue, 128 GB)",
+            "current_price": "₹54,900",
+            "original_price": "₹69,900",
+            "discount_percentage": 21.5,
+            "url": "https://www.flipkart.com/apple-iphone-13-blue-128-gb/p/sample",
+            "platform": "flipkart",
+            "image_url": "",
+            "scraped_at": int(time.time())
+        }
+    ],
+    "amazon": [
+        {
+            "id": "amazon_sample1",
+            "title": "OnePlus Nord CE 3 Lite 5G (Pastel Lime, 8GB RAM, 128GB Storage)",
+            "current_price": "₹19,999",
+            "original_price": "₹21,999",
+            "discount_percentage": 9.1,
+            "url": "https://www.amazon.in/dp/sample1",
+            "platform": "amazon",
+            "image_url": "",
+            "scraped_at": int(time.time())
+        }
+    ],
+    "myntra": [
+        {
+            "id": "myntra_sample1",
+            "title": "Roadster Men Navy Blue Solid Round Neck T-shirt",
+            "current_price": "₹399",
+            "original_price": "₹799",
+            "discount_percentage": 50.1,
+            "url": "https://www.myntra.com/tshirts/roadster/sample",
+            "platform": "myntra",
+            "image_url": "",
+            "scraped_at": int(time.time())
+        }
+    ]
+}
+
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
     """Serve the main HTML page"""
@@ -93,7 +148,7 @@ async def create_razorpay_order(request: Request):
             }
         }
         
-        order = razorpay_client.order.create(data=order_data)
+        order = razorpay_client.order.create(order_data)
         
         return {
             "order_id": order["id"],
@@ -125,8 +180,9 @@ async def verify_payment(request: Request):
         }
         
         try:
-            razorpay_client.utility.verify_payment_signature(params_dict)
-        except razorpay.errors.SignatureVerificationError:
+            import razorpay.utils as razorpay_utils
+            razorpay_utils.verify_payment_signature(params_dict, os.getenv("RAZORPAY_KEY_SECRET", ""))
+        except Exception:
             raise HTTPException(status_code=400, detail="Invalid payment signature")
         
         # Get the deal and generate affiliate link
@@ -211,7 +267,7 @@ async def get_platform_deals(platform: str):
     # Check cache freshness (5 minutes)
     current_time = datetime.now()
     if (platform in cache_timestamp and 
-        (current_time - cache_timestamp[platform]).seconds < 300 and
+        (current_time - cache_timestamp[platform]).total_seconds() < 300 and
         platform in deals_cache):
         return {"platform": platform, "deals": deals_cache[platform]}
     
@@ -234,37 +290,44 @@ async def get_all_deals():
     """Get deals from all platforms"""
     all_deals = []
     
+    # First, add sample deals to ensure immediate display
+    for platform, platform_deals in sample_deals.items():
+        for deal in platform_deals:
+            deal_copy = deal.copy()
+            deal_copy["platform"] = platform
+            all_deals.append(deal_copy)
+    
     # Create tasks for concurrent scraping
     tasks = []
+    platforms_to_scrape = []
+    
     for platform, scraper in scrapers.items():
         # Check cache first
         current_time = datetime.now()
         if (platform in cache_timestamp and 
-            (current_time - cache_timestamp[platform]).seconds < 300 and
+            (current_time - cache_timestamp[platform]).total_seconds() < 300 and
             platform in deals_cache):
             # Use cached data
             for deal in deals_cache[platform]:
-                deal["platform"] = platform
-                all_deals.append(deal)
+                deal_copy = deal.copy()
+                deal_copy["platform"] = platform
+                all_deals.append(deal_copy)
         else:
             # Create scraping task
             tasks.append(scrape_platform_async(platform, scraper))
+            platforms_to_scrape.append(platform)
     
     # Execute scraping tasks
     if tasks:
-        platform_names = [name for name, scraper in scrapers.items() 
-                         if name not in cache_timestamp or 
-                         (datetime.now() - cache_timestamp[name]).seconds >= 300]
-        
         results = await asyncio.gather(*tasks, return_exceptions=True)
         
         for i, result in enumerate(results):
             if isinstance(result, Exception):
-                logger.error(f"Error scraping {platform_names[i]}: {str(result)}")
+                logger.error(f"Error scraping {platforms_to_scrape[i]}: {str(result)}")
                 continue
             
-            platform = platform_names[i]
-            deals = result
+            platform = platforms_to_scrape[i]
+            deals = result if result else []
             
             # Update cache
             deals_cache[platform] = deals
@@ -272,13 +335,22 @@ async def get_all_deals():
             
             # Add platform info and append to all_deals
             for deal in deals:
-                deal["platform"] = platform
-                all_deals.append(deal)
+                deal_copy = deal.copy()
+                deal_copy["platform"] = platform
+                all_deals.append(deal_copy)
     
-    # Sort deals by discount percentage or price
-    all_deals.sort(key=lambda x: float(x.get("discount_percentage", 0)), reverse=True)
+    # Remove duplicates and sort by discount percentage
+    seen_titles = set()
+    unique_deals = []
+    for deal in all_deals:
+        title_key = f"{deal['platform']}_{deal['title'][:50]}"
+        if title_key not in seen_titles:
+            seen_titles.add(title_key)
+            unique_deals.append(deal)
     
-    return {"deals": all_deals, "total_count": len(all_deals)}
+    unique_deals.sort(key=lambda x: float(x.get("discount_percentage", 0)), reverse=True)
+    
+    return {"deals": unique_deals, "total_count": len(unique_deals)}
 
 @app.get("/health")
 async def health_check():
